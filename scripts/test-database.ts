@@ -8,28 +8,31 @@ async function testDatabase() {
     // Test 1: Check connection
     console.log("✅ Connected to database!")
 
-    // Test 2: Create a test user
-    console.log("\n📝 Creating a test user...")
-    const newUser = await prisma.user.create({
+    // Test 2: Create a test post
+    console.log("\n📝 Creating a test post...")
+    const newPost = await prisma.post.create({
       data: {
-        email: "demo@example.com",
-        name: "Demo User",
+        title: "Test Post",
+        content: "This is a test post to verify the database connection is working correctly.",
+        author: "Test Author",
       },
     })
-    console.log("✅ Created user:", newUser)
+    console.log("✅ Created post:", newPost)
 
-    // Test 3: Fetch all users
-    console.log("\n📋 Fetching all users...")
-    const allUsers = await prisma.user.findMany()
-    console.log(`✅ Found ${allUsers.length} user(s):`)
-    allUsers.forEach((user) => {
-      console.log(`   - ${user.name} (${user.email})`)
+    // Test 3: Fetch all posts
+    console.log("\n📋 Fetching all posts...")
+    const allPosts = await prisma.post.findMany()
+    console.log(`✅ Found ${allPosts.length} post(s):`)
+    allPosts.forEach((post) => {
+      console.log(`   - "${post.title}" by ${post.author}`)
     })
 
     console.log("\n🎉 All tests passed! Your database is working perfectly.\n")
   } catch (error) {
     console.error("❌ Error:", error)
     process.exit(1)
+  } finally {
+    await prisma.$disconnect()
   }
 }
 
